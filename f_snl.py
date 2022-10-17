@@ -77,7 +77,6 @@ def type_s():
 def snl_back():
     win_snl.destroy()
     from menu import win_menu
-    win_menu.mainloop()
 
 lab_header = tk.Label(text="SAVINGS AND LOANS CALCULATOR", font="Arial 10 bold", fg="white", background="#ffdb58",height=2)
 lab_header.pack(fill="both")
