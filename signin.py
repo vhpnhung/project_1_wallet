@@ -31,11 +31,8 @@ def check_signin():
         lab_message_signin.config(text="Password is incorrect")
     else:
         win_signin.destroy()
-        import menu
-        import f_add
-        import f_report
-        import f_snl
-
+        from menu import win_menu
+        win_menu.mainloop()
 
 
 lab_signin = tk.Label(text="Login")

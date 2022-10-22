@@ -14,16 +14,26 @@ photo_add = tk.PhotoImage(file = r"E:\Nhung\Data Analyst\Python\Codegym\Case\ima
 photo_snl = tk.PhotoImage(file = r"E:\Nhung\Data Analyst\Python\Codegym\Case\image\m_snl.png")
 photo_report = tk.PhotoImage(file = r"E:\Nhung\Data Analyst\Python\Codegym\Case\image\m_report.png")
 
+def again_add():
+    from f_add import win_add
+    win_add.deiconify()
+def again_report():
+    from f_report import win_rud
+    win_rud.deiconify()
+def again_snl():
+    from f_snl import win_snl
+    win_snl.deiconify()
+
 
 def menu_add():
-    win_menu.destroy()
     import f_add
+    b_add_menu.config(command=again_add)
 def menu_report():
-    win_menu.destroy()
     import f_report
+    b_report_menu.config(command=again_report)
 def menu_snl():
-    win_menu.destroy()
     import f_snl
+    b_snl_menu.config(command=again_snl)
 
 def menu_quit():
     win_menu.destroy()
