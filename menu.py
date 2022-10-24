@@ -48,13 +48,13 @@ lab_title_menu.pack(fill=BOTH)
 fr_menu = tk.Frame(height=5, pady=150)
 fr_menu.pack()
 
-b_add_menu = ttk.Button(fr_menu, text="New", image=photo_add, compound=TOP, command=menu_add)
+b_add_menu = ttk.Button(fr_menu, text="   New transaction   ", image=photo_add, compound=TOP, command=menu_add)
 b_add_menu.grid(row=0, column=0)
 
-b_report_menu = ttk.Button(fr_menu, text="Cashflow Report", image=photo_report, compound=TOP, command=menu_report)
+b_report_menu = ttk.Button(fr_menu, text="   Wallet Manager   ", image=photo_report, compound=TOP, command=menu_report)
 b_report_menu.grid(row=0, column=1)
 
-b_snl_menu = ttk.Button(fr_menu, text="Savings & Loans", image=photo_snl, compound=TOP, command=menu_snl)
+b_snl_menu = ttk.Button(fr_menu, text="   Savings Calculation   ", image=photo_snl, compound=TOP, command=menu_snl)
 b_snl_menu.grid(row=0, column=3)
 
 b_signout = ttk.Button(text="Sign out", command=menu_quit)

@@ -98,12 +98,7 @@ def done_edit():
     # ham sua ttin
     new = en_money_edit.get()
     selected_item = en_item_edit.get().lower()
-        # lay gia tri moi
-    # new = en_money_edit.get() ###################################
-    #     # lay item
-    # selected_item = select_item()
-
-        # ham chinh
+    # ham chinh
     add.update(type, category_choice, selected_item, new)
     # show
     if var.get() == 1: # CHON INCOME
@@ -191,7 +186,7 @@ lab_header.pack(fill="both")
 lab_intro_add = tk.Label(win_rud, text="View your wallet", pady=10, font="Sans 10 bold italic")
 lab_intro_add.pack()
 
-fr_rud = tk.Frame(win_rud, height=5, pady=80)
+fr_rud = tk.Frame(win_rud, height=5, pady=50)
 fr_rud.pack()
 
 fr_interact = tk.Frame(fr_rud, padx=20, pady=20)

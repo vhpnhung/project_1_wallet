@@ -1,107 +1,148 @@
 import tkinter as tk
 from tkinter import ttk
+from snl import formula
 
-win_snl = tk.Tk()
+win_snl = tk.Toplevel() #############################
 win_snl.title("Wisexpend - Savings Calculator")
 win_snl.geometry("500x500+400+80")
 
-var = tk.IntVar()
-var_type = tk.IntVar()
-var_time = tk.StringVar()
+var_type = tk.IntVar() # lump-sum, periodical
+var_value = tk.IntVar() # pv,fv
 
-def time():
-    if var.get() == 1:
-        print("week")
-    if var.get() == 2:
-        print("month")
-    if var.get() == 3:
-        print("year")
+def init_pv():
+    lab_fv.grid(row=5, column=0, columnspan=5, sticky="w")
+    en_fv.grid(row=5, column=5, columnspan=3, sticky="w")
 
-def init_basics_s():
-    lab_pv_savings = tk.Label(fr_savings, text="Now I have (VND)   ", font="Roboto 8 bold", pady=5)
-    lab_pv_savings.grid(row=2, column=0, columnspan=3, sticky="w")
+    lab_time.grid(row=6, column=0, columnspan=5, sticky="w")
+    en_time.grid(row=6, column=5, columnspan=3, sticky="w")    
 
-    en_pv_savings = ttk.Entry(fr_savings)
-    en_pv_savings.grid(row=2, column=4, columnspan=8)
-
-    lab_i_savings = tk.Label(fr_savings, text="Annual interest rate (%)   ", font="Roboto 8 bold", pady=5)
-    lab_i_savings.grid(row=3, column=0, columnspan=3, sticky="w")
-
-    en_i_savings = ttk.Entry(fr_savings)
-    en_i_savings.grid(row=3, column=4, columnspan=8)
-
-    lab_maturity_savings = tk.Label(fr_savings, text="Maturity   ", font="Roboto 8 bold", pady=5)
-    lab_maturity_savings.grid(row=4, column=0, columnspan=1, sticky="w")
-
-    en_maturity_savings = tk.Entry(fr_savings)
-    en_maturity_savings.grid(row=4, column=1, columnspan=4, sticky="w")
-
-    lab_year = tk.Label(fr_savings, text="year(s)", bg="#f0f0f0",pady=10, padx=20)
-    lab_year.grid(row=4, column=6, columnspan=8, sticky="w")
-
-def init_times(): #BO DI!
-    global sel_maturity
-    sel_maturity = tk.Radiobutton(fr_savings, text="week(s)", variable=var, value=1, command=time)
-    sel_maturity.grid(row=5, column=6, columnspan=5, sticky="w")
-
-    sel_maturity = tk.Radiobutton(fr_savings, text="month(s)", variable=var, value=2, command=time)
-    sel_maturity.grid(row=6, column=6, columnspan=5, sticky="w")
-
-    sel_maturity = tk.Radiobutton(fr_savings, text="year(s)", variable=var, value=3, command=time,bg="white")
-    sel_maturity.grid(row=7, column=6, columnspan=5, sticky="w")
-
-def choice(selection):
-    a = selection
-
-def init_time():
-    var_time.set("time")
-    drop= tk.OptionMenu(fr_savings, var_time, "week", "month", "year", command=choice)
-    drop.grid(row=4, column=6, columnspan=5, sticky="w")
+    lab_i.grid(row=7, column=0, columnspan=5, sticky="w")
+    en_i.grid(row=7, column=5, columnspan=3, sticky="w")
 
 def init_fv():
-    lab_fv_savings = tk.Label(fr_savings, text="In the future, I will receive (VND)  ", font="Roboto 8 bold", pady=5)
-    lab_fv_savings.grid(row=6, column=0, columnspan=3, sticky="w")
+    lab_pv.grid(row=5, column=0, columnspan=5, sticky="w")
+    en_pv.grid(row=5, column=5, columnspan=3, sticky="w")
 
-    en_fv_savings = ttk.Entry(fr_savings)
-    en_fv_savings.grid(row=6, column=4, columnspan=8)
+    lab_time.grid(row=6, column=0, columnspan=5, sticky="w")
+    en_time.grid(row=6, column=5, columnspan=3, sticky="w")    
 
-def type_s():
-    if var_type.get() == 1:
-        init_basics_s()
+    lab_i.grid(row=7, column=0, columnspan=5, sticky="w")
+    en_i.grid(row=7, column=5, columnspan=3, sticky="w")    
+
+def collapse():
+    lab_fv.destroy()
+    en_fv.destroy()
+    lab_time.destroy()
+    en_time.destroy()
+    lab_i.destroy()
+    en_i.destroy()
+    lab_pv.destroy()
+    en_pv.destroy()
+    lab_result.config(text="")
+
+def new():
+    global lab_fv
+    global en_fv
+    global lab_time
+    global en_time
+    global lab_i
+    global en_i
+    global lab_pv
+    global en_pv
+    lab_fv = tk.Label(fr_savings, text="I want to have (VND)")
+    en_fv = tk.Entry(fr_savings)
+    lab_time = tk.Label(fr_savings, text="after (years)")
+    en_time = tk.Entry(fr_savings)
+    lab_i = tk.Label(fr_savings, text="with the nterest rate of (%)")
+    en_i = tk.Entry(fr_savings)
+    lab_pv = tk.Label(fr_savings, text="Now I have (VND)")
+    en_pv = tk.Entry(fr_savings)
+
+def reset():
+    collapse()
+    new()
+    b_start.config(text="Confirm", command=init_format)
+
+def init_format():
+    if var_value.get() == 1: # PV
+        init_pv()
+    else: # FV
         init_fv()
-    else:
-        init_basics_s()
-        init_time()
-        init_fv()
-    
+    b_start.config(text="Show result", command=snl)
+
+def snl():
+    global lab_result
+    i = int(en_i.get())/100
+    t = int(en_time.get())
+    if var_type.get() == 1: # LUMP-SUM
+        choice = "lump-sum"
+        if var_value.get() == 1: # pv
+            fv = int(en_fv.get())
+            pv = formula.pv(choice, fv, i, t) 
+            lab_result.config(text=f"Today I need to put {pv} in savings", font="Roboto 11 italic bold", pady=5)
+        else: #fv
+            pv = int(en_pv.get())
+            fv = formula.fv(choice, pv, i, t)
+            lab_result.config(text=f"I will have {fv} in {t} years", font="Roboto 11 italic bold", pady=5) 
+            #########
+    else: # PERIODIC
+        choice = "periodic"
+        if var_value.get() == 1: # annuity
+            fv = int(en_fv.get())
+            pv = formula.pv(choice, fv, i, t)
+            lab_result.config(text=f"Each year I need to put {pv} in savings", font="Roboto 11 italic bold", pady=5)
+        else: # future value
+            pv = int(en_pv.get())
+            fv = formula.fv(choice, pv, i, t)
+            lab_result.config(text=f"I will have {fv} in {t} years", font="Roboto 11 italic bold", pady=5)
+    lab_result.grid(row=10, column=0, columnspan=10)
+           
+
 def snl_back():
-    win_snl.destroy()
-    from menu import win_menu
+    win_snl.withdraw()
 
-lab_header = tk.Label(text="SAVINGS AND LOANS CALCULATOR", font="Arial 10 bold", fg="white", background="#ffdb58",height=2)
+lab_header = tk.Label(win_snl, text="SAVINGS AND LOANS CALCULATOR", font="Arial 10 bold", fg="white", background="#ffdb58",height=2)
 lab_header.pack(fill="both")
 
-lab_intro_add = tk.Label(pady=10, font="Sans 10 bold italic", 
-text="""Is your savings and loans' plan okay? 
+lab_intro_add = tk.Label(win_snl, pady=10, font="Sans 10 bold italic", 
+text="""Is your savings plan okay? 
 Let Wisexpend help you!""")
 lab_intro_add.pack()
 
-fr_savings = tk.Frame(padx=20, pady=100)
+fr_savings = tk.Frame(win_snl, padx=20, pady=40)
 fr_savings.pack()
 
-lab_title_savings = tk.Label(fr_savings, text="Choose your type of savings", font="Roboto 9 italic")
-lab_title_savings.grid(row=0, column=0, columnspan=10)
+# GIAO DIEN CHON VALUE
+lab_title_type = tk.Label(fr_savings, text="What do you want to know?", font="Roboto 9 italic bold")
+lab_title_type.grid(row=0, column=0, columnspan=8)
 
-sel_type_savings = tk.Radiobutton(fr_savings, text="Lump-sum", variable=var_type, value=1, command=type_s)
-sel_type_savings.grid(row=1, column=0, columnspan=5)
+sel_pv = tk.Radiobutton(fr_savings, text="Present value", variable=var_value, value=1, pady=5, command=reset)
+sel_pv.grid(row=1, column=0, columnspan=4)
 
-sel_type_savings = tk.Radiobutton(fr_savings, text="Periodic", variable=var_type, value=2, command=type_s)
-sel_type_savings.grid(row=1, column=5, columnspan=5)
+sel_fv = tk.Radiobutton(fr_savings, text="Future value", variable=var_value, value=2, pady=5, command=reset)
+sel_fv.grid(row=1, column=4, columnspan=4)
 
-b_back = ttk.Button(text="Back", command=snl_back)
+# GIAO DIEN CHON TYPE
+lab_title_savings = tk.Label(fr_savings, text="Choose your type of savings", font="Roboto 9 italic bold")
+lab_title_savings.grid(row=2, column=0, columnspan=8)
+
+sel_type_savings = tk.Radiobutton(fr_savings, text="Lump-sum", variable=var_type, value=1, pady=5, command=reset)
+sel_type_savings.grid(row=3, column=0, columnspan=4)
+
+sel_type_savings = tk.Radiobutton(fr_savings, text="Periodic", variable=var_type, value=2, pady=5, command=reset)
+sel_type_savings.grid(row=3, column=4, columnspan=4)
+
+# NUT ENTER
+b_start = ttk.Button(fr_savings, text="Confirm", command=init_format)
+b_start.grid(row=40, column=0, columnspan=16)
+
+b_back = ttk.Button(win_snl, text="Back", command=snl_back)
 b_back.pack()
 
-lab_footer = tk.Label(text="", background="#ffdb58",height=2)
-lab_footer.pack(fill="both", side="bottom")
+# GIAO DIEN ENTRY
+new()
 
-win_snl.mainloop()
+lab_result = tk.Label(fr_savings)
+
+lab_footer = tk.Label(win_snl, text="", background="#ffdb58",height=2)
+lab_footer.pack(fill="both", side="bottom")
