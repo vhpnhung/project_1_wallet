@@ -16,7 +16,7 @@ var_choice = tk.IntVar()
 type_add = tk.StringVar()
 item_add = tk.StringVar()
 
-
+# ham view income
 def i_view():
     # gan gia tri
     i_choice = combo_type_rud.get().lower()
@@ -33,6 +33,7 @@ def i_view():
     lab_money_view.config(text=i_number)
     lab_money_view.pack(side="right")
 
+# ham view expense
 def e_view():
     global e_choice
     # gan gia tri
@@ -50,7 +51,7 @@ def e_view():
     lab_money_view.config(text=e_number)
     lab_money_view.pack(side="right")
 
-
+# ham khoi dong list category
 def view_rud():
     global type
     if var.get() == 1: # CHON INCOME
@@ -68,16 +69,16 @@ def view_rud():
     b_enter_rud.grid(row=18, column=0, columnspan=10)
     b_enter_rud.config(state="normal")
 
+# ham khoi tao list item
 def check_item():
     global category_choice
     category_choice = combo_type_rud.get().lower()
     en_money_edit.config(state="normal")
     en_item_edit.config(state="normal")
     if var.get() == 1: # CHON INCOME
-        combo_item["value"]=add.income[category_choice]
+        i_view()
     else:
-        combo_item["value"]=add.expense[category_choice]
-    combo_item.config(state="normal")
+        e_view()
     if var_choice.get() == 2: # CHON EDIT
         b_enter_rud.config(state="normal", command=done_edit)
     elif var_choice.get() == 3: #  CHON REMOVE
@@ -85,15 +86,7 @@ def check_item():
         lab_item_edit.config(text="Remove item")
         en_money_edit.config(state="disable")
 
-def select_item():
-    selected_item = combo_item.get()
-    removed_characters=[r"'", ":", " "]
-    for i in range(0,10):
-        selected_item = selected_item.replace(str(i),"")
-    for k in removed_characters:
-        selected_item = selected_item.replace(k, "")
-    return selected_item
-
+# ham sua thong tin sau khi edit
 def done_edit():
     # ham sua ttin
     new = en_money_edit.get()
@@ -106,6 +99,7 @@ def done_edit():
     else:
         e_view()
 
+# ham sua ttin sau khi remove
 def done_remove():
     # khai bao
     selected_item = en_item_edit.get().lower()
@@ -117,6 +111,7 @@ def done_remove():
     else:
         e_view()
 
+# ham khoi tao list item de edit
 def edit_rud():
     global type
     if var.get() == 1: # CHON INCOME
@@ -133,6 +128,7 @@ def edit_rud():
     b_enter_rud.grid(row=18, column=0, columnspan=10)
     b_check_item.config(state="normal", command=check_item)
 
+# ham reset man hinh ve trang thai ban dau
 def reset():
     var.set(None)
     type_add.set(None)
@@ -140,22 +136,19 @@ def reset():
     lab_money_view.config(text="")
     lab_what_view.config(text="")
     b_enter_rud.config(state="disable")
-    combo_item.config(state="disable")
     b_check_item.config(state="disable")
     en_money_edit.delete(0, "end")
     en_money_edit.config(state="disable")
     en_item_edit.delete(0, "end")
     en_item_edit.config(state="disable")
     
-
+# ham khoi tao mode chinh
 def choice(): ### MENU CHINH
     reset()
     if var_choice.get() == 1: # CHON VIEW
         sel_earning_rud.config(command=view_rud)
         sel_expenditure_rud.config(command=view_rud)
     elif var_choice.get() == 2: # CHON EDIT
-        lab_combo2.grid(row=5, column=1, columnspan=2, sticky="w")
-        combo_item.grid(row=5,column=3,columnspan=3)
         lab_item_edit.grid(row=6, column=1, columnspan=3, sticky="w")
         en_item_edit.grid(row=6,column=4)
         lab_money_edit.grid(row=7, column=1, columnspan=3, sticky="w")
@@ -164,8 +157,6 @@ def choice(): ### MENU CHINH
         sel_earning_rud.config(command=edit_rud)
         sel_expenditure_rud.config(command=edit_rud)
     else: # CHON DELETE
-        lab_combo2.grid(row=5, column=1, columnspan=2, sticky="w")
-        combo_item.grid(row=5,column=3,columnspan=3)
         sel_earning_rud.config(command=edit_rud)
         sel_expenditure_rud.config(command=edit_rud)
         b_check_item.grid(row=5, column=0)
@@ -174,7 +165,7 @@ def choice(): ### MENU CHINH
     sel_earning_rud.config(state="normal")
     sel_expenditure_rud.config(state="normal")
     
-
+# quay ve menu chinh
 def rud_back():
     win_rud.withdraw()
 
@@ -219,8 +210,6 @@ lab_combo1.grid(row=4, column=1, columnspan=2, sticky="w")
 combo_type_rud = ttk.Combobox(fr_interact, textvariable=type_add, state="disable")
 combo_type_rud.grid(row=4,column=3,columnspan=3)
 
-combo_item = ttk.Combobox(fr_interact, textvariable=item_add, state="disable")
-
 b_enter_rud = ttk.Button(fr_interact, text="Execute", state="disable")
 b_check_item = ttk.Button(fr_interact, text=">>>", state="disable")
 
@@ -231,7 +220,6 @@ lab_money_view = tk.Label(fr_visual)
 
 
 # phan edit
-lab_combo2 = tk.Label(fr_interact, text="List of item(s)", font="Roboto 8 bold")
 
 lab_item_edit = tk.Label(fr_interact, text="Change item", font="Roboto 8 bold")
 
@@ -240,8 +228,6 @@ lab_money_edit = tk.Label(fr_interact, text="Change amount to", font="Roboto 8 b
 en_money_edit = tk.Entry(fr_interact, state="disable")
 en_item_edit = tk.Entry(fr_interact, state="disable")
 
-
-# phan delete
 
 
 

@@ -72,7 +72,7 @@ def init_format():
 
 def snl():
     global lab_result
-    i = int(en_i.get())/100
+    i = float(en_i.get())/100
     t = int(en_time.get())
     if var_type.get() == 1: # LUMP-SUM
         choice = "lump-sum"
