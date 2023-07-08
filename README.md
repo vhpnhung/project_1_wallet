@@ -15,3 +15,13 @@ After successfully signing in, you can use all app functions without manually op
 
 ## Python Library applied
 I have used *Tkinter*, along with Python basic knowledge, to create the app
+
+
+## Noted for  contents
+* 'Data_add' folder contains code for calculations, category collection, and quantitative data storage
+* 'snl' folder contains necessities for Savings and Loans calculation
+* 'signin.py' runs the sign in window
+* 'menu.py' runs the main menu of the app
+* 'f_add.py' runs New Transaction option
+* 'f_report.py' runs Wallet manager option
+* 'f_snl.py' runs Savings calculation option
